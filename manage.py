@@ -2,10 +2,12 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from dotenv import load_dotenv
 
 
 def main():
     """Run administrative tasks."""
+    load_dotenv("parallel_peaks_back/.env")
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'parallel_peaks_back.settings')
     try:
         from django.core.management import execute_from_command_line
