@@ -21,9 +21,9 @@ class MatchingEntry(models.Model):
             errors['album_adjectives'] = ValidationError('The album adjectives are not in a valid list.')
         if not self.album_musical_elements and self.album_musical_elements != []:
             errors['album_musical_elements'] = ValidationError('The album musical elements are not in a valid list.')
-        if not self.match_adjectives and self.album_adjectives != []:
+        if not self.match_adjectives and self.match_adjectives != []:
             errors['match_adjectives'] = ValidationError('The match adjectives are not in a valid list.')
-        if not self.match_musical_elements and self.album_musical_elements != []:
+        if not self.match_musical_elements and self.match_musical_elements != []:
             errors['match_musical_elements'] =  ValidationError('The match musical elements are not in a valid list.')
         if errors:
             raise ValidationError(errors)
@@ -53,17 +53,17 @@ class MatchingEntry(models.Model):
     # Q2 - What macro genre would you classify the album you're recommending in?
     #    - Don't worry too much about perfect categorisation - just write what best fits!
     class MacroGenres(models.TextChoices):
-        CFB = 'CFB', 'Country, Folk & Blues'
+        CFB = 'Country, Folk & Blues', 'Country, Folk & Blues'
         CLASSICAL = 'Classical', 'Classical'
-        ED = 'ED', 'Electronic and Dance'
-        HHRB = 'HHRB', 'Hip Hop and R&B'
-        IIPEPP = 'IIPEPP', 'Indie, Indie Pop, Emo and Pop Punk'
-        JSNSF = 'JSNSF', 'Jazz, Soul, Neo-Soul and Funk'
+        ED = 'Electronic and Dance', 'Electronic and Dance'
+        HHRB = 'Hip Hop and R&B', 'Hip Hop and R&B'
+        IIPEPP = 'Indie, Indie Pop, Emo and Pop Punk', 'Indie, Indie Pop, Emo and Pop Punk'
+        JSNSF = 'Jazz, Soul, Neo-Soul and Funk', 'Jazz, Soul, Neo-Soul and Funk'
         POP = 'Pop', 'Pop'
-        RMPNPPRI = 'RMPNPPRI', 'Rock, Metal, Punk, Noise, Prog, Post-Rock, Industrial',
+        RMPNPPRI = 'Rock, Metal, Punk, Noise, Prog, Post-Rock, Industrial', 'Rock, Metal, Punk, Noise, Prog, Post-Rock, Industrial',
         OTHER = 'Other', 'Other'
     album_macrogenre = models.CharField(
-        max_length=15,
+        max_length=60,
         choices=MacroGenres.choices,
         help_text="What macro genre would you classify the album you're recommending in?"
     )
@@ -76,7 +76,7 @@ class MatchingEntry(models.Model):
 
     # Q1 - What microgenre(s) would you associate with your album?
     album_microgenre = models.CharField(
-        max_length=100,
+        max_length=200,
         blank=True,
         help_text="What microgenre(s) would you associate with your album?"
     )
@@ -149,6 +149,7 @@ class MatchingEntry(models.Model):
     )
 
     # Q4 - What musical elements/instruments do you love the most about your album?
+    # Vocals, Guitar, Drums, Bass/bassline, Piano/keyboard, Synths/beats, Brass, Crazy sounds!, Other (free choice)
     album_musical_elements = models.JSONField(
         validators=[ListOfStringsValidator('Your album musical elements are invalid.')],
         default=list,
@@ -315,6 +316,7 @@ class MatchingEntry(models.Model):
     )
 
     # Q4 - What musical elements/instruments do you want your match to have
+    # Vocals, Guitar, Drums, Bass/bassline, Piano/keyboard, Synths/beats, Brass, Crazy sounds!, Other (free choice)
     match_musical_elements = models.JSONField(
         validators=[ListOfStringsValidator('Your match musical elements are invalid.')],
         default=list,
