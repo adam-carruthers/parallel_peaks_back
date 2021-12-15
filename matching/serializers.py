@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import MatchingEntry
-from .validators import ListOfStringsValidator
 
 
 class MatchingEntrySerializer(serializers.ModelSerializer):

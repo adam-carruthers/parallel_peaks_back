@@ -8,23 +8,27 @@ from allauth.account.utils import _has_verified_for_login, send_email_confirmati
 
 from django.contrib.auth.models import User
 
-from matching.serializers import MatchingEntrySerializer
+# from matching.serializers import MatchingEntrySerializer
 
 
 # TODO: Make it so that when you change your password your tokens are changed
 class UserDetailsSerializer(serializers.ModelSerializer):
-    matching_entry = MatchingEntrySerializer(allow_null=True)
+    # matching_entry = MatchingEntrySerializer(allow_null=True)
+
     is_matcher = serializers.SerializerMethodField()
+
     def get_is_matcher(self, user):
         return user.has_perm('matching.is_matcher')
+
     is_moderator = serializers.SerializerMethodField()
+
     def get_is_moderator(self, user):
         return user.has_perm('matching.is_moderator')
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'is_staff', 'is_matcher', 'is_moderator', 'first_name', 'last_name',
-                  'matching_entry')
+        fields = ('id', 'username', 'email', 'is_staff', 'is_matcher',
+                  'is_moderator', 'first_name', 'last_name')  # TODO: Add back matching entry
         read_only_fields = ('email', 'matching_entry')
 
 
@@ -34,11 +38,11 @@ class LoginSerializer(DRALoginSerializer):
         if not user:
             return user
         if not _has_verified_for_login(user, user.email):
-            send_email_confirmation(self.context['request'], user, signup=False, email=user.email)
+            send_email_confirmation(
+                self.context['request'], user, signup=False, email=user.email)
             raise exceptions.ValidationError("You need to verify your email before you can login. "
                                              "We have sent you another email.")
         return user
-
 
 
 class LoginResponseSerializer(serializers.ModelSerializer):
